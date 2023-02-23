@@ -48,4 +48,4 @@ From: nvcr.io/nvidia/cuda:12.0.1-devel-rockylinux8
 %appenv casa
 
 %apprun casa
-	   /casa_builds/roadrunner/build/synthesis/tRoadrunner $*
+	   /casa_builds/roadrunner/build/casacpp/synthesis/tRoadrunner $*
