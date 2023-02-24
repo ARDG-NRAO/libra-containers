@@ -1,3 +1,0 @@
-# roadrunner-singuarity
-
-The goal here is to be able to build a minimum dependency nvidia-gpu capable singularity container for shipping to various dev folks around.
