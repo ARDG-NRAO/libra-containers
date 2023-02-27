@@ -1,6 +1,6 @@
 # Roadrunner Singularity Container
 
-The goal of this repo is to enable the production of a singularity based minimum dependency `tRoadRunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available]()
+The goal of this repo is to enable the production of a singularity based minimum dependency `tRoadRunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online]()
 
 ## Building the container
 In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container is a local folder, you can run the following.
@@ -21,7 +21,8 @@ The `--fakeroot` is only needed if you want to add addtional packages you might 
 Singularity>
 ```
 
-Within this shell you should be able to launch the tRoadRunner application with the command
+Within this shell you should be able to launch the `tRoadRunner` application with the command
 ```
 Singularity> /casa_builds/roadrunner/build/casacpp/synthesis/tRoadRunner
 ```
+This should result in a commandline interface to the `tRoadRunner` application
