@@ -9,7 +9,8 @@ From: nvcr.io/nvidia/cuda:12.0.1-devel-rockylinux8
    
 %labels
 
-   AUTHOR pjaganna@nrao.edu
+   Author pjaganna@nrao.edu
+   Version v0.0.1 
 
 %post
 
@@ -22,13 +23,6 @@ From: nvcr.io/nvidia/cuda:12.0.1-devel-rockylinux8
 
    # Packages needed for libsakura development
    dnf -y install eigen3-devel fftw-devel
- 
-   # Additional packages needed for casa development
-   dnf -y install java-1.?.0-openjdk-devel python38-wheel python38-numpy swig pkgconf-pkg-config xerces-c-devel libxml2-devel libxml++-devel libxslt-devel gsl-devel sqlite-devel wcslib-devel openmpi-devel xorg-x11-server-Xvfb
-  
-   # Set python 3.8 as the default python
-   alternatives --set python /usr/bin/python3.8
-   alternatives --set python3 /usr/bin/python3.8
  
    dnf -y install https://casa.nrao.edu/download/devel/grpc/el8-1.18/protobuf-3.6.1-3.el8.x86_64.rpm
    dnf -y install https://casa.nrao.edu/download/devel/grpc/el8-1.18/protobuf-compiler-3.6.1-3.el8.x86_64.rpm
