@@ -22,7 +22,7 @@ From: nvcr.io/nvidia/cuda:12.0.1-devel-rockylinux8
    dnf -y install git cmake gcc-c++ gcc-gfortran gtest-devel ccache readline-devel ncurses-devel blas-devel lapack-devel cfitsio-devel fftw-devel wcslib-devel python38 python38-devel python38-numpy flex bison tar curl
 
    # Packages needed for libsakura development
-   dnf -y install eigen3-devel fftw-devel openmpi-devel
+   dnf -y install eigen3-devel fftw-devel openmpi-devel gsl-devel
  
    dnf -y install https://casa.nrao.edu/download/devel/grpc/el8-1.18/protobuf-3.6.1-3.el8.x86_64.rpm
    dnf -y install https://casa.nrao.edu/download/devel/grpc/el8-1.18/protobuf-compiler-3.6.1-3.el8.x86_64.rpm
@@ -39,7 +39,19 @@ From: nvcr.io/nvidia/cuda:12.0.1-devel-rockylinux8
 
 %environment
 
-%appenv casa
 
-%apprun casa
-	   /casa_builds/roadrunner/build/casacpp/synthesis/tRoadrunner $*
+%runscript 
+	   /casa_builds/roadrunner/build/casacpp/synthesis/tRoadRunner $*
+
+%apprun roadrunner
+      /casa_builds/roadrunner/build/casacpp/synthesis/tRoadRunner $*
+
+%apphelp roadrunner
+      The roadrunner application is a CASA (https://open-bitbucket.nrao.edu/projects/CASA/repos/casa6/browse)
+      code based gridder that can be deployed on a GPU/CPU for gridding. The application takes inputs either
+      from the commandline or through an interactive shell environment. In order to run this on a GPU please
+      don not forget to bind it with commandline using the --nv flag.
+
+%help
+      The container is holds the roadrunner app which can be run via the singularity app command once the
+      container has been built.
