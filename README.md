@@ -6,14 +6,14 @@ The goal of this repo is to enable the production of a singularity based minimum
 In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container is a local folder, you can run the following.
 
 ```
-singularity build --sandbox --fakeroot --fix-perms my_container_folder roadrunner.def
+singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-11.4.0-devel-rockylinux8_readonly.def
 ```
 The `--fakeroot` flag allows you root access within the container which we need to install the dependencies for development. The `--fix-perms` will allow you for you to remove the directory structure without needing higher privileges (sudo/su). 
 
 ## Running the code from within the container
 The application can be used as an app or via the commandline. In order to access the application via commandline you can launch a `shell` inside the container as follows. This allows you to edit code and build the application once again should you need it
 ```
-singularity shell --writable --fakeroot roadrunner.
+singularity shell --writable --fakeroot my_container_folder.
 ```
 
 The `--fakeroot` is only needed if you want to add addtional packages you might need (such as an editor of choice). This will alter you prompt and should look like 
@@ -21,8 +21,12 @@ The `--fakeroot` is only needed if you want to add addtional packages you might 
 Singularity>
 ```
 
-Within this shell you should be able to launch the `tRoadRunner` application with the command
+Within this shell you should be able to launch the `tRoadRunner` application with the command, however to bind the system nvidia runtime libraries you need to start a singularity shell as follows
 ```
+singularity shell --nv my_container_folder
 Singularity> /casa_builds/roadrunner/build/casacpp/synthesis/tRoadRunner
 ```
-This should result in a commandline interface to the `tRoadRunner` application
+This should result in a commandline interface to the `tRoadRunner` application. By default the path from which you launched the container would be bound inside the container. If you want to bind additional paths to run code you can do it as follows
+```
+singularity shell --nv my_container_folder --bind host_path:continer_path
+```
