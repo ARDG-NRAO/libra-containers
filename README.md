@@ -1,6 +1,6 @@
 # Roadrunner Singularity Container
 
-The goal of this repo is to enable the production of a singularity based minimum dependency `tRoadRunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html)
+The goal of this repo is to enable the production of a singularity based minimum dependency `roadrunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html)
 
 ## Building the container
 In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container is a local folder, you can run the following.
@@ -16,17 +16,17 @@ The application can be used as an app or via the commandline. In order to access
 singularity shell --writable --fakeroot my_container_folder.
 ```
 
-The `--fakeroot` is only needed if you want to add addtional packages you might need (such as an editor of choice). This will alter you prompt and should look like 
+The `--fakeroot` is only needed if you want to add addtional packages you might need (such as an editor of choice). This will alter your prompt and should look like 
 ```
 Singularity>
 ```
 
-Within this shell you should be able to launch the `tRoadRunner` application with the command, however to bind the system nvidia runtime libraries you need to start a singularity shell as follows
+Within this shell you should be able to launch the `roadrunner` application with the command, however to bind the system nvidia runtime libraries you need to start a singularity shell as follows
 ```
 singularity shell --nv my_container_folder
-Singularity> /casa_builds/roadrunner/build/casacpp/synthesis/tRoadRunner
+Singularity> /libra/apps/src/roadrunner
 ```
-This should result in a commandline interface to the `tRoadRunner` application. By default the path from which you launched the container would be bound inside the container. If you want to bind additional paths to run code you can do it as follows
+This should result in a commandline interface to the `roadrunner` application. By default the path from which you launched the container would be bound inside the container. If you want to bind additional paths to run code you can do it as follows
 ```
 singularity shell --nv my_container_folder --bind host_path:continer_path
 ```
