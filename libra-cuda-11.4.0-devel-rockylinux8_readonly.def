@@ -13,21 +13,30 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 
 %post
 
+
    dnf -y install epel-release
    dnf install -y dnf-plugins-core
    dnf config-manager --set-enabled powertools
 
    # Packages needed for casacore development
-   dnf -y install git cmake gcc-c++ gcc-gfortran ccache flex bison tar curl {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel
+   dnf -y install git cmake gcc-c++ gcc-gfortran ccache flex bison tar curl bzip2
+   dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel
+   
 
    mv /readline.pc /usr/lib64/pkgconfig/
    git clone https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git
    cd libra
    make -f makefile.libra allclone
-   make -f makefile.libra allbuild
+   make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
    cd apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
 
-%help
+   # Install python packages
+
+   pip3 install -U exodus-bundler
+   exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
+   sh roadrunner_86.sh roadrunner_bundle  
+
+
       The container is holds the roadrunner app which can be run via the singularity app command once the
       container has been built.
