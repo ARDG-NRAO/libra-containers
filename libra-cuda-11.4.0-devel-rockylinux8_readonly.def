@@ -35,8 +35,33 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 
    pip3 install -U exodus-bundler
    exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
-   sh roadrunner_86.sh roadrunner_bundle  
+   sh roadrunner_86.sh roadrunner_bundle
+   tar -cjSf roadrunner_bundle.tar.bz2 roadrunner_bundle
 
+%test
+   exit 0
 
-      The container is holds the roadrunner app which can be run via the singularity app command once the
-      container has been built.
+%environment
+     export PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:/libra/dependencies/build/casacpp/synthesis/:$PATH
+     export LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:$LD_LIBRARY_PATH
+
+%runscript
+     exec /libra/apps/src/roadrunner
+
+%help
+     The container is holds the roadrunner app which can be run via the singularity app command once the
+     container has been built.
+
+%apprun roadrunner
+     exec /libra/apps/src/roadrunner
+
+%applabels roadrunner
+     The roadrunner is a standalone gridding application that can run on CPU or GPU as desired.
+
+%appinstall roadrunner
+     
+     cd /libra
+     #make -f makefile.libra allclone
+     make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
+     cd apps/src
+     make -f makefile.casacore roadrunner tableinfo mssplit
