@@ -30,3 +30,9 @@ This should result in a commandline interface to the `roadrunner` application. B
 ```
 singularity shell --nv my_container_folder --bind host_path:continer_path
 ```
+
+## Running the roadrunner app from within singularity
+```
+singularity run --nv --app roadrunner my_container_folder
+```
+Would let you run and interact with the application as if it were natively run on your machine while being deployed from within the container. Other such apps will be made available in this manner going forward.
