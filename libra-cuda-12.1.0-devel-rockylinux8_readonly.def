@@ -64,7 +64,7 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
    The roadrunner app can be run using the following command:
      singularity run --nv --app roadrunner roadrunner.sif 
    For mounting paths from outside the container use the following command:
-     singularity run --nv --bind /path/to/mount:/path/to/mount roadrunner.sif
+     singularity run --nv --bind /path/to/mount:/container/mount/point roadrunner.sif
 %apprun roadrunner
      exec /libra/apps/src/roadrunner
 
@@ -73,8 +73,12 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 
 %appinstall roadrunner
      
-     cd /libra
-     #make -f makefile.libra allclone
-     make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
-     cd apps/src
-     make -f makefile.casacore roadrunner tableinfo mssplit
+   cd /libra
+   #make -f makefile.libra allclone
+   make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
+   cd apps/src
+   make -f makefile.casacore roadrunner tableinfo mssplit
+%appstrip roadrunner
+   strip /libra/apps/src/roadrunner
+   strip /libra/apps/src/tableinfo
+   strip /libra/apps/src/mssplit
