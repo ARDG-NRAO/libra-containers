@@ -28,7 +28,7 @@ Singularity> /libra/apps/src/roadrunner
 ```
 This should result in a commandline interface to the `roadrunner` application. By default the path from which you launched the container would be bound inside the container. If you want to bind additional paths to run code you can do it as follows
 ```
-singularity shell --nv my_container_folder --bind host_path:continer_path
+singularity shell --nv  --bind host_path:container_path my_container_folder
 ```
 
 ## Running the roadrunner app from within singularity
