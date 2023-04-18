@@ -1,9 +1,21 @@
 # Roadrunner Singularity Container
 
-The goal of this repo is to enable the production of a singularity based minimum dependency `roadrunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html)
+The goal of this repo is to enable the production of a singularity based minimum dependency `roadrunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html). Running singularity in a privileged mode for the general user also requires that you be added to the singularity user group, make sure your user id belongs that group before you proceed any further.
+
+[[TOC]]
 
 ## Building the container
-If you are going to use the container or build repeatedly please set the SINGULARITY_CACHEDIR variable in your bashrc to a path that is not in your user area. This will ensure that the build does not fail due to the user quota limits. In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container as a local folder, you can run the following.
+If you are going to use the container or build repeatedly please set the SINGULARITY_CACHEDIR variable in your bashrc to a path that is not in your user area. This will ensure that the build does not fail due to the user quota limits. The [libra](https://gitlab.nrao.edu/sbhatnag/libra) project relies on [kokkos](https://github.com/kokkos/kokkos/) which has device specific compile directives. So the hardware on which you are going to utilize the container will define the flag in the makefile. The default flag is for the new generation of ampere GPUs like the A4000 and so is set to kokkos_ARCH_AMPERE86. Alter it according to the compute archiecture of your GPU. Here is a table for easy reference.
+
+|min CUDA Version|kokkos FLAG|GPU Model|
+|11.1|kokkos_ARCH_AMPERE86|A4000, A5000, A6000, RTX30X0|
+|11.1|kokkos_ARCH_AMPERE80|A100|
+|10.0|kokkos_ARCH_TURING75|RTX20X0, QUADRO 4000 - QUADRO 8000|
+|9.0|kokkos_ARCH_VOLTA70|V100|
+|8.0|kokkos_ARCH_PASCAL61|GTX10X0|
+|8.0|kokkos_ARCH_PASCAL60|P100|
+
+In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container as a local folder, you can run the following.
 
 ```
 singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-11.4.0-devel-rockylinux8_readonly.def
