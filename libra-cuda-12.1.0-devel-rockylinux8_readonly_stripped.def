@@ -31,6 +31,19 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
    cd apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
 
+   strip /libra/apps/src/roadrunner
+   strip /libra/apps/src/tableinfo
+   strip /libra/apps/src/mssplit
+   strip /libra/dependencies/linux_64b/bin/*
+   strip /libra/dependencies/linux_64b/sbin/lib*
+   strip /usr/lib64/lib*
+   strip /usr/lib/lib*
+   rm -rf /libra/dependencies/src/
+   rm -rf /libra/dependencies/build/
+
+   du -sh /libra/ > /libra_size.txt
+   echo "libra size is $(cat /libra_size.txt)"
+
    # Install python packages
 
    #pip3 install -U exodus-bundler
@@ -71,7 +84,13 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 %applabels roadrunner
      The roadrunner is a standalone gridding application that can run on CPU or GPU as desired.
 
-%appinstall roadrunner   
-   cd /libra/apps/src
+%appinstall roadrunner
+     
+   cd /libra
+   #make -f makefile.libra allclone
+   make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
+   cd apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
+
+
 
