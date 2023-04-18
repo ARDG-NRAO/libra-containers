@@ -3,7 +3,7 @@
 The goal of this repo is to enable the production of a singularity based minimum dependency `roadrunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html)
 
 ## Building the container
-In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container is a local folder, you can run the following.
+If you are going to use the container or build repeatedly please set the SINGULARITY_CACHEDIR variable in your bashrc to a path that is not in your user area. This will ensure that the build does not fail due to the user quota limits. In order to build the roadrunner container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container as a local folder, you can run the following.
 
 ```
 singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-11.4.0-devel-rockylinux8_readonly.def
@@ -37,3 +37,9 @@ A point of note is that multiple --bind commands can be utilized to bing multipl
 singularity run --nv --app roadrunner my_container_folder
 ```
 Would let you run and interact with the application as if it were natively run on your machine while being deployed from within the container. Other such apps will be made available in this manner going forward.
+
+
+## CUDA Versions and Compatibility
+
+The version of cuda and the corresponding versions of drivers needed to run the conainers is available [here](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html).
+We have tested and support cuda toolkit verions 11.1 and beyond where the nvidia graphics driver version is >=450.80.02. There toolkit version is specified on the name of each .def file in the repo. Please choose the one appropriate for your graphics card. 
