@@ -1,0 +1,93 @@
+Bootstrap: docker
+
+From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
+
+
+%files
+   readline.pc /
+
+%labels
+
+   Author pjaganna@nrao.edu
+   Version v0.0.1 
+
+%post
+
+
+   dnf -y install epel-release
+   dnf install -y dnf-plugins-core
+   dnf config-manager --set-enabled powertools
+
+   # Packages needed for casacore development
+   dnf -y install git cmake gcc-c++ gcc-gfortran ccache flex bison tar curl bzip2
+   dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel
+   
+
+   mv /readline.pc /usr/lib64/pkgconfig/
+   git clone https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git
+   cd libra
+   make -f makefile.libra allclone
+   make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
+   cd apps/src
+   make -f makefile.casacore roadrunner tableinfo mssplit
+
+   # Install python packages
+
+   #pip3 install -U exodus-bundler
+   #exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
+   #sh roadrunner_86.sh roadrunner_bundle
+   #tar -cjSf roadrunner_bundle.tar.bz2 roadrunner_bundle
+
+   # Install nsight compute profiler
+   rpm --import https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/D42D0685.pub && \
+   yum install -y yum-utils && \
+   yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64 && \
+   yum list available | grep nsight && \
+   yum install -y \
+       nsight-compute-2023.1.0 && \
+   rm -rf /var/cache/yum/*
+
+%test
+   nvcc --version > /tmp/nvcc_version.txt
+   echo "nvcc version is $(cat /tmp/nvcc_version.txt)"
+   nvidia-smi > /tmp/nvidia-smi.txt
+   echo "nvidia-smi is $(cat /tmp/nvidia-smi.txt)"
+   exit 0
+
+%environment
+   export PIP_ROOT_USER_ACTION=ignore
+   export LC_ALL=C
+   export PATH=/opt/nvidia/nsight-compute/2023.1.0/:/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
+   export LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:$LD_LIBRARY_PATH
+
+%runscript
+   exec /libra/apps/src/roadrunner
+
+%help
+   The container holds the roadrunner app which can be run via the singularity app command once the
+   container has been built. The contains also contains the dependencies needed to run the roadrunner
+   application. 
+   The container can be built using the following command:
+     singularity build --fakeroot roadrunner.sif roadrunner.def
+   The container can be run using the following command:     
+     singularity run --nv roadrunner.sif
+   The roadrunner app can be run using the following command:
+     singularity run --nv --app roadrunner roadrunner.sif 
+   For mounting paths from outside the container use the following command:
+     singularity run --nv --bind /path/to/mount:/container/mount/point roadrunner.sif
+%apprun roadrunner
+     exec /libra/apps/src/roadrunner
+
+%applabels roadrunner
+     The roadrunner is a standalone gridding application that can run on CPU or GPU as desired.
+
+%appinstall roadrunner   
+   cd /libra/apps/src
+   make -f makefile.casacore roadrunner tableinfo mssplit
+%apprun ncuroadrunner
+   exec ncu --target-processes all --set full -o /libra/apps/src/roadrunner.ncu-rep /libra/apps/src/roadrunner "$@"
+   
+%apphelp ncuroadrunner
+   The ncuroadrunner run the nvidia profiling tool ncu on the roadrunner
+   application with --target-process all and --set full and will write the
+   output to /libra/apps/src/roadrunner.ncu-rep
