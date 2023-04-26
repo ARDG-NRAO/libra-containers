@@ -85,8 +85,8 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
    cd /libra/apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
 %apprun ncuroadrunner
-   exec ncu --target-processes all --set full -o /libra/apps/src/roadrunner.ncu-rep /libra/apps/src/roadrunner "$@"
-   
+   exec ncu --target-processes all --set full -o /data/roadrunner.ncu-rep /libra/apps/src/roadrunner "$@"
+
 %apphelp ncuroadrunner
    The ncuroadrunner run the nvidia profiling tool ncu on the roadrunner
    application with --target-process all and --set full and will write the
