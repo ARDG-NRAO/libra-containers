@@ -1,0 +1,88 @@
+Bootstrap: docker
+
+From: nvcr.io/nvidia/cuda:12.2.0-devel-ubuntu22.04
+
+
+%files
+
+
+%labels
+
+   Author pjaganna@nrao.edu
+   Version v0.0.1 
+
+%post
+   export BASEPATH=/Software
+   export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
+   echo 'tzdata tzdata/Areas select Etc' | debconf-set-selections; \
+   echo 'tzdata tzdata/Zones/Etc select UTC' | debconf-set-selections; \
+   apt-get update -qqy && apt-get install -qqy --no-install-recommends tzdata && apt-get clean 
+   apt update -y && apt upgrade -y
+   apt-get install -y casacore-dev libgsl-dev libhdf5-dev libfftw3-dev libboost-dev libboost-date-time-dev libboost-filesystem-dev python3-dev libboost-program-options-dev libboost-system-dev libboost-python-dev
+   apt-get install -y libcfitsio-dev cmake g++ gfortran gcc-multilib git wget libblas-dev liblapack-dev libncurses5-dev libreadline6-dev flex bison wcslib-dev doxygen python3-sphinx
+   mkdir -p Software && cd Software
+   mkdir -p install build
+
+   cd $BASEPATH
+  
+   git clone -b master http://gitlab.com/aroffringa/wsclean.git
+   git clone https://git.astron.nl/RD/idg.git
+   git clone https://github.com/casacore/casacore.git
+   git clone --recursive -j4 https://git.astron.nl/RD/EveryBeam.git
+   cd casacore
+   mkdir -p data && cd data
+   wget ftp://ftp.astron.nl/outgoing/Measures/WSRT_Measures_20230628-160001.ztar
+   tar -zxvf WSRT_Measures_20230628-160001.ztar
+   cd $BASEPATH
+
+
+   # Install EveryBeam
+   cd $BASEPATH/build
+   mkdir -p casacore wsclean idg EveryBeam
+   cd EveryBeam
+   cmake -DCMAKE_INSTALL_PREFIX=$BASEPATH/install  -DDOWNLOAD_LOBES=ON $BASEPATH/EveryBeam
+   make -j 16 install
+
+   # Install IDG
+   cd $BASEPATH/build/idg
+   cmake -DCMAKE_INSTALL_PREFIX=$BASEPATH/install -DBUILD_LIB_CUDA=ON -DBUILD_WITH_PYTHON=ON $BASEPATH/idg
+   make -j 16 install
+
+   # Install casacore
+   cd $BASEPATH/build/casacore
+   cmake -DCMAKE_INSTALL_PREFIX=$BASEPATH/install  -DDATA_DIR=$BASEPATH/casacore/data -DUSE_OPENMP=ON -DUSE_HDF5=ON -DUSE_THREADS=ON -DBUILD_PYTHON3=ON// $BASEPATH/casacore
+   make -j 16 install
+
+   #Install wsclean
+   cd $BASEPATH/build/wsclean
+   cmake -DCMAKE_INSTALL_PREFIX=$BASEPATH/install  -DIDG-API_DIR=/Software/idg/ -DCASACORE_ROOT_DIR=/Software/install -DEveryBeam_DIR=/Software/install/ $BASEPATH/wsclean
+   make -j 16 install
+   
+%test
+   nvcc --version > /tmp/nvcc_version.txt
+   echo "nvcc version is $(cat /tmp/nvcc_version.txt)"
+   nvidia-smi > /tmp/nvidia-smi.txt
+   echo "nvidia-smi is $(cat /tmp/nvidia-smi.txt)"
+   exit 0
+
+%environment
+   export PIP_ROOT_USER_ACTION=ignore
+   export LC_ALL=C
+   export PATH=/opt/nvidia/nsight-compute/2023.1.0/:/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
+   export LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:$LD_LIBRARY_PATH
+   export VBBUCKETSIZE=10
+%runscript
+
+
+%help
+   The container holds the roadrunner app which can be run via the singularity app command once the
+   container has been built. The contains also contains the dependencies needed to run the roadrunner
+   application. 
+   The container can be built using the following command:
+     singularity build --fakeroot roadrunner.sif roadrunner.def
+   The container can be run using the following command:     
+     singularity run --nv roadrunner.sif
+   The roadrunner app can be run using the following command:
+     singularity run --nv --app roadrunner roadrunner.sif 
+   For mounting paths from outside the container use the following command:
+     singularity run --nv --bind /path/to/mount:/container/mount/point roadrunner.sif
