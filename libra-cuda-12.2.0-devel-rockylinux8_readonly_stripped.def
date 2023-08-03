@@ -1,6 +1,6 @@
 Bootstrap: docker
 
-From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
+From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
 
 
 %files
@@ -31,21 +31,25 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
    cd apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
 
+   strip /libra/apps/src/roadrunner
+   strip /libra/apps/src/tableinfo
+   strip /libra/apps/src/mssplit
+   strip /libra/dependencies/linux_64b/bin/*
+   strip /libra/dependencies/linux_64b/sbin/lib*
+   strip /usr/lib64/lib*
+   strip /usr/lib/lib*
+   rm -rf /libra/dependencies/src/
+   rm -rf /libra/dependencies/build/
+
+   du -sh /libra/ > /libra_size.txt
+   echo "libra size is $(cat /libra_size.txt)"
+
    # Install python packages
 
    #pip3 install -U exodus-bundler
    #exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
    #sh roadrunner_86.sh roadrunner_bundle
    #tar -cjSf roadrunner_bundle.tar.bz2 roadrunner_bundle
-
-   # Install nsight compute profiler
-   rpm --import https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/D42D0685.pub && \
-   yum install -y yum-utils && \
-   yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64 && \
-   yum list available | grep nsight && \
-   yum install -y \
-       nsight-compute-2023.1.0 && \
-   rm -rf /var/cache/yum/*
 
 %test
    nvcc --version > /tmp/nvcc_version.txt
@@ -56,8 +60,7 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 
 %environment
    export PIP_ROOT_USER_ACTION=ignore
-   export LC_ALL=C
-   export PATH=/opt/nvidia/nsight-compute/2023.1.0/:/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
+   export PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
    export LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:$LD_LIBRARY_PATH
 
 %runscript
@@ -81,13 +84,13 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 %applabels roadrunner
      The roadrunner is a standalone gridding application that can run on CPU or GPU as desired.
 
-%appinstall roadrunner   
-   cd /libra/apps/src
+%appinstall roadrunner
+     
+   cd /libra
+   #make -f makefile.libra allclone
+   make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
+   cd apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
-%apprun ncuroadrunner
-   exec ncu --target-processes all --set full -o /data/roadrunner.ncu-rep /libra/apps/src/roadrunner "$@"
 
-%apphelp ncuroadrunner
-   The ncuroadrunner run the nvidia profiling tool ncu on the roadrunner
-   application with --target-process all and --set full and will write the
-   output to /libra/apps/src/roadrunner.ncu-rep
+
+

@@ -1,6 +1,6 @@
 Bootstrap: docker
 
-From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
+From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
 
 
 %files
@@ -31,12 +31,6 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
    cd apps/src
    make -f makefile.casacore roadrunner tableinfo mssplit
 
-   # Install python packages
-
-   #pip3 install -U exodus-bundler
-   #exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
-   #sh roadrunner_86.sh roadrunner_bundle
-   #tar -cjSf roadrunner_bundle.tar.bz2 roadrunner_bundle
 
 %test
    nvcc --version > /tmp/nvcc_version.txt
