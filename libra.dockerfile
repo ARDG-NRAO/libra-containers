@@ -17,12 +17,12 @@ RUN cd /
 RUN git clone --branch kokkos4 https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git
 RUN cd $LIBRA_PATH
 RUN make -f /libra/makefile.docker allclone
-RUN make -f /libra/makefile.docker allbuild
-#RUN echo "nvcc --version > /tmp/nvcc_version.txt" >> /tests.sh
-#RUN echo "echo "nvcc version is $(cat /tmp/nvcc_version.txt)"" >> /tests.sh
-#RUN echo "nvidia-smi > /tmp/nvidia-smi.txt" >> /tests.sh
-#RUN echo "echo "nvidia-smi is $(cat /tmp/nvidia-smi.txt)"" >> /tests.sh
-#RUN echo "exit 0" >> /tests.sh
-#RUN chmod u+x /tests.sh
-CMD exec /bin/bash
-#CMD exec /libra/apps/install/roadrunner
+RUN make Kokkos_CUDA_ARCH=Kokkos_ARCH_TURING75 -f /libra/makefile.docker allbuild
+RUN echo "nvcc --version > /tmp/nvcc_version.txt" >> /tests.sh
+RUN echo "echo "nvcc version is $(cat /tmp/nvcc_version.txt)"" >> /tests.sh
+RUN echo "nvidia-smi > /tmp/nvidia-smi.txt" >> /tests.sh
+RUN echo "echo "nvidia-smi is $(cat /tmp/nvidia-smi.txt)"" >> /tests.sh
+RUN echo "exit 0" >> /tests.sh
+RUN chmod u+x /tests.sh
+ENTRYPOINT ["/libra/apps/install/roadrunner"]
+#CMD ["/bin/bash" "-c"]
