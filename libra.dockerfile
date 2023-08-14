@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8 as base
 ADD readline.pc /
+ADD start.sh /
 LABEL Author pjaganna@nrao.edu
 LABEL Version v0.0.1
 ENV PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
@@ -24,5 +25,6 @@ RUN echo "nvidia-smi > /tmp/nvidia-smi.txt" >> /tests.sh
 RUN echo "echo "nvidia-smi is $(cat /tmp/nvidia-smi.txt)"" >> /tests.sh
 RUN echo "exit 0" >> /tests.sh
 RUN chmod u+x /tests.sh
-ENTRYPOINT ["/libra/apps/install/roadrunner"]
-#CMD ["/bin/bash" "-c"]
+WORKDIR "/data"
+#ENTRYPOINT ["/libra/apps/install/roadrunner"]
+ENTRYPOINT ["/bin/bash","/start.sh"]
