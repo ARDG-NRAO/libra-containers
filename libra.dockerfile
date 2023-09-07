@@ -1,11 +1,10 @@
 # syntax=docker/dockerfile:1
 FROM nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8 as base
 ADD readline.pc /
-ADD start.sh /
 LABEL Author pjaganna@nrao.edu
 LABEL Version v0.0.1
 ENV PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
-ENV LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
 ENV LIBRA_PATH=/libra
 RUN dnf -y install epel-release
 RUN dnf install -y dnf-plugins-core
@@ -27,4 +26,5 @@ RUN echo "exit 0" >> /tests.sh
 RUN chmod u+x /tests.sh
 WORKDIR "/data"
 #ENTRYPOINT ["/libra/apps/install/roadrunner"]
+COPY start.sh /
 ENTRYPOINT ["/bin/bash","/start.sh"]
