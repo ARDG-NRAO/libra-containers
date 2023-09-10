@@ -16,6 +16,8 @@ job_build:
   stage: build
   script:
     - echo "Building the project"
+    - echo $GIT_CLONE_PATH
+    - echo $CI_BUILDS_DIR
     - singularity build --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
 
 job_test:
