@@ -12,7 +12,7 @@ stages:
 variables:
  GIT_CLONE_PATH=$CI_BUILDS_DIR/libra-containers
  CI_BUILDS_DIR=/home/gpuhost003/pjaganna/gitlab-runner-builds
- ANSIBLE_FORCE_COLOR=True
+ ANSIBLE_FORCE_COLOR="True"
  PY_COLORS='1'
 job_build:
   stage: build
