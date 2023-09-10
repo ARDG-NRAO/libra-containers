@@ -28,8 +28,8 @@ From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
    cd libra
    make -f makefile.libra allclone
    make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
-   cd apps/src
-   make -f makefile.casacore roadrunner tableinfo mssplit
+   #cd apps/src
+   #make -f makefile.casacore roadrunner tableinfo mssplit
 
 
 %test
