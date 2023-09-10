@@ -29,15 +29,13 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
    cd libra
    make -f makefile.libra allclone
    make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
-   cd apps/src
-   make -f makefile.casacore roadrunner tableinfo mssplit
 
    # Install python packages
 
-   pip3 install -U exodus-bundler
-   exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
-   sh roadrunner_86.sh roadrunner_bundle
-   tar -cjSf roadrunner_bundle.tar.bz2 roadrunner_bundle
+   #pip3 install -U exodus-bundler
+   #exodus /libra/apps/src/roadrunner -o roadrunner_86.sh 
+   #sh roadrunner_86.sh roadrunner_bundle
+   #tar -cjSf roadrunner_bundle.tar.bz2 roadrunner_bundle
 
 %test
    nvcc --version > /tmp/nvcc_version.txt
@@ -75,7 +73,4 @@ From: nvcr.io/nvidia/cuda:11.4.0-devel-rockylinux8
 %appinstall roadrunner
      
    cd /libra
-   #make -f makefile.libra allclone
    make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
-   cd apps/src
-   make -f makefile.casacore roadrunner tableinfo mssplit

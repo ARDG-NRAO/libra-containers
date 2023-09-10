@@ -28,8 +28,6 @@ From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
    cd libra
    make -f makefile.libra allclone
    make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
-   #cd apps/src
-   #make -f makefile.casacore roadrunner tableinfo mssplit
 
 
 %test
@@ -65,7 +63,4 @@ From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
 %applabels roadrunner
      The roadrunner is a standalone gridding application that can run on CPU or GPU as desired.
 
-%appinstall roadrunner   
-   cd /libra/apps/src
-   make -f makefile.casacore roadrunner tableinfo mssplit
 
