@@ -6,8 +6,16 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- test
-sast:
+  - build
+  - test
+
+job_build:
+  stage: build
+  script:
+    - echo "Building the project"
+    - singularity build --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
+
+job_test:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  script:
+    - echo "Running tests"
