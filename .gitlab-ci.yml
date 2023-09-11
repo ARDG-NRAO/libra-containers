@@ -9,9 +9,6 @@ stages:
   - build
   - test
 
-variables:
- ANSIBLE_FORCE_COLOR="True"
- PY_COLORS='1'
 job_build:
   stage: build
   script:
