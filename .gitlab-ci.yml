@@ -16,7 +16,7 @@ job_build:
     - echo $GIT_CLONE_PATH
     - echo $CI_BUILDS_DIR
     - singularity build --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
-    - docker build -t libra_ci -f libra.dockerfile .
+    - docker build --network host -t libra_ci -f libra.dockerfile .
 
 job_test:
   stage: test
