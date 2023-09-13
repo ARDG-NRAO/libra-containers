@@ -18,12 +18,9 @@ RUN dnf config-manager --set-enabled powertools
 #RUN dnf update -y
 RUN dnf -y install git cmake gcc-c++ gcc-gfortran ccache flex bison tar curl bzip2 make
 RUN dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel
-RUN mv /readline.pc /usr/lib64/pkgconfig/
+RUN mv /data/readline.pc /usr/lib64/pkgconfig/
 RUN cd /
-RUN git clone --branch kokkos4 https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git
-RUN cd $LIBRA_PATH
-RUN make -f /libra/makefile.docker allclone
-RUN make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f /libra/makefile.docker allbuild
+RUN git clone --branch kokkos4 https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git && cd libra && make -f makefile.docker allclone && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.docker allbuild
 RUN echo "nvcc --version > /tmp/nvcc_version.txt" >> /tests.sh
 RUN echo "echo "nvcc version is $(cat /tmp/nvcc_version.txt)"" >> /tests.sh
 RUN echo "nvidia-smi > /tmp/nvidia-smi.txt" >> /tests.sh
