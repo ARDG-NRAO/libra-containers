@@ -15,7 +15,9 @@ RUN dnf config-manager --set-enabled powertools \
 RUN make -f /libra/makefile.docker allbuild \
     && du -sh /libra/apps/build \
     && du -sh /libra/dependencies/build \
-    && du -sh /libra/dependencies/src/
+    && du -sh /libra/dependencies/src/ \
+    && echo "Removing build and source directories to save space" \
+    && rm -rf /libra/apps/build rm -rf /libra/dependencies/build rm -rf /libra/dependencies/src 
 WORKDIR "/"
 #ENTRYPOINT ["/libra/apps/install/roadrunner"]
 COPY start.sh /
