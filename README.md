@@ -19,7 +19,7 @@ If you are going to use the container or build repeatedly please set the SINGULA
 In order to build the LibRA container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container as a local folder, you can run the following.
 
 ```
-singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-11.4.0-devel-rockylinux8_readonly.def
+singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
 ```
 The `--fakeroot` flag allows you root access within the container which we need to install the dependencies for development. The `--fix-perms` will allow you for you to remove the directory structure without needing higher privileges (sudo/su). 
 
@@ -55,4 +55,4 @@ Would let you run and interact with the application as if it were natively run o
 ## CUDA Versions and Compatibility
 
 The version of cuda and the corresponding versions of drivers needed to run the conainers is available [here](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html).
-We have tested and support cuda toolkit verions 11.1 and beyond where the nvidia graphics driver version is >=450.80.02. There toolkit version is specified on the name of each .def file in the repo. Please choose the one appropriate for your graphics card. 
+We have tested and support cuda toolkit verions 11.1 and beyond where the nvidia graphics driver version is >=450.80.02. There toolkit version is specified on the name of each .def file in the repo. Please choose the one appropriate for your graphics card.
