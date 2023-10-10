@@ -24,7 +24,7 @@ From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
    
 
    mv /readline.pc /usr/lib64/pkgconfig/
-   git clone https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git
+   git clone https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/ardg/libra.git
    cd libra
    make -f makefile.libra allclone
    make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild

@@ -11,7 +11,7 @@ RUN yum -y update \
 RUN dnf config-manager --set-enabled powertools \
     && dnf -y install git cmake gcc-c++ gcc-gfortran ccache flex bison tar curl bzip2 make \
     && dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel \
-    && mv /readline.pc /usr/lib64/pkgconfig/ && cd / && git clone --branch nohpg https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/sbhatnag/libra.git && cd $LIBRA_PATH && make -f /libra/makefile.docker allclone
+    && mv /readline.pc /usr/lib64/pkgconfig/ && cd / && git clone --branch nohpg https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/ardg/libra.git && cd $LIBRA_PATH && make -f /libra/makefile.docker allclone
 RUN make -f /libra/makefile.docker allbuild \
     && du -sh /libra/apps/build \
     && du -sh /libra/dependencies/build \

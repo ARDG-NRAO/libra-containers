@@ -9,6 +9,16 @@ usage() {
   exit 1
 }
 
+# check for help flag
+if [[ "$1" == "--help" ]]; then
+  usage
+fi
+
+# check for override flag
+if [[ "$1" == "--override" ]]; then
+  exec /bin/bash
+fi
+
 # not enough arguments? we have failed
 if [ "$#" -lt 1 ]; then
     usage
@@ -27,4 +37,3 @@ fi
 echo "passing command line arguments to $APP: $@"
 
 /libra/apps/install/$APP $@ 
-
