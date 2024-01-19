@@ -16,7 +16,7 @@ If you are going to use the container or build repeatedly please set the SINGULA
 |8.0|kokkos_ARCH_PASCAL61|GTX10X0|
 |8.0|kokkos_ARCH_PASCAL60|P100|
 
-In order to build the LibRA container for development so you can make all your edits before shipping out for testing I prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container as a local folder, you can run the following.
+In order to build the LibRA container for development so you can make all your edits before shipping out for testing we prefer the `--sandbox` method. In order to build a `sandbox` which is essentially a linux container as a local folder, you can run the following.
 
 ```
 singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
