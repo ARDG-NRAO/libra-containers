@@ -15,7 +15,7 @@ job_build:
     - echo "Building the project"
     - echo $GIT_CLONE_PATH
     - echo $CI_BUILDS_DIR
-    - podman build --network -t libra_ci -f libra.dockerfile .
+    - podman build --network host -t libra_ci -f libra.dockerfile .
     - singularity build --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
 
 job_test:
