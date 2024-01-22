@@ -21,7 +21,7 @@ RUN dnf -y clean all \
     && git clone --branch kokkos4 https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/ardg/libra.git \
     && cd libra \
     && make -f makefile.docker allclone \
-    && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.docker allbuild
+    && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.libra allbuild
 
 # Final stage
 FROM base
