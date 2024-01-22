@@ -11,8 +11,8 @@ RUN yum -y update \
     && cd / \
     && git clone --branch nohpg https://github.com/ARDG-NRAO/LibRA.git libra\
     && cd $LIBRA_PATH \
-    && make -f /libra/makefile.docker allclone \
-    && make -f /libra/makefile.docker allbuild
+    && make -f /libra/makefile.libra allclone \
+    && make -f /libra/makefile.libra allbuild
 
 # Final stage
 ENV PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH

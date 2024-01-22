@@ -12,7 +12,7 @@ RUN dnf config-manager --set-enabled powertools \
     && dnf -y install git cmake gcc-c++ gcc-gfortran ccache flex bison tar curl bzip2 make \
     && dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel \
     && mv /readline.pc /usr/lib64/pkgconfig/ && cd / && git clone --branch nohpg https://github.com/ARDG-NRAO/LibRA.git libra && cd $LIBRA_PATH && make -f /libra/makefile.docker allclone
-RUN make -f /libra/makefile.docker allbuild \
+RUN make -f /libra/makefile.libra allbuild \
     && du -sh /libra/apps/build \
     && du -sh /libra/dependencies/build \
     && du -sh /libra/dependencies/src/ \

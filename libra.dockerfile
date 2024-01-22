@@ -20,7 +20,7 @@ RUN dnf -y clean all \
     && cd /data/ \
     && git clone https://github.com/ARDG-NRAO/LibRA.git libra\
     && cd libra \
-    && make -f makefile.docker allclone \
+    && make -f makefile.libra allclone \
     && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.libra allbuild
 
 # Final stage
