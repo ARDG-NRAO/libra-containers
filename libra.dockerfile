@@ -18,7 +18,7 @@ RUN dnf -y clean all \
     && dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel \
     && mv /data/readline.pc /usr/lib64/pkgconfig/ \
     && cd /data/ \
-    && git clone --branch kokkos4 https://roadrunner-deploy:NF63isCrbsxu5LhqjdDy@gitlab.nrao.edu/ardg/libra.git \
+    && git clone https://github.com/ARDG-NRAO/LibRA.git libra\
     && cd libra \
     && make -f makefile.docker allclone \
     && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.libra allbuild
