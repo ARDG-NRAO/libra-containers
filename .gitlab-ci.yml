@@ -21,4 +21,4 @@ job_build:
 job_test:
   stage: test
   script:
-    - echo "Running tests"
+    - echo "tests is currently not implemented"

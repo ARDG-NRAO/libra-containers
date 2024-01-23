@@ -9,7 +9,7 @@ RUN yum -y update \
     && dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel \
     && mv /readline.pc /usr/lib64/pkgconfig/ \
     && cd / \
-    && git clone --branch nohpg https://github.com/ARDG-NRAO/LibRA.git libra\
+    && git clone --branch nohpg https://github.com/ARDG-NRAO/LibRA.git libra \
     && cd $LIBRA_PATH \
     && make -f /libra/makefile.libra allclone \
     && make -f /libra/makefile.libra allbuild

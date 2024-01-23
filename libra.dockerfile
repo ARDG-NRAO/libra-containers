@@ -7,9 +7,9 @@ LABEL Version v0.0.1
 
 # Build stage
 FROM base as build
-ENV PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
-ENV LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
-ENV LIBRA_PATH=/libra
+ENV PATH=/data/libra/apps/src/:/data/libra/dependencies/linux_64b/bin/:/data/libra/dependencies/linux_64b/sbin/:$PATH
+ENV LD_LIBRARY_PATH=/data/libra/apps/install:/data/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
+ENV LIBRA_PATH=/data/libra
 RUN dnf -y clean all \
     && dnf -y install epel-release \
     && dnf install -y dnf-plugins-core \
@@ -18,17 +18,17 @@ RUN dnf -y clean all \
     && dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel \
     && mv /data/readline.pc /usr/lib64/pkgconfig/ \
     && cd /data/ \
-    && git clone https://github.com/ARDG-NRAO/LibRA.git libra\
+    && git clone --recursive https://github.com/ARDG-NRAO/LibRA.git libra\
     && cd libra \
     && make -f makefile.libra allclone \
     && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.libra allbuild
 
 # Final stage
 FROM base
-ENV PATH=/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/libra/dependencies/linux_64b/sbin/:$PATH
-ENV LD_LIBRARY_PATH=/libra/apps/src/RoadRunner/:/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
-ENV LIBRA_PATH=/libra
-COPY --from=build /data/libra/apps/install/roadrunner /data/libra/apps/install/roadrunner
+ENV PATH=/data/libra/apps/src/:/libra/dependencies/linux_64b/bin/:/data/libra/dependencies/linux_64b/sbin/:$PATH
+ENV LD_LIBRARY_PATH=/data/libra/apps/install:/data/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
+ENV LIBRA_PATH=/data/libra
+COPY --from=build /data/libra/apps/install/* /data/libra/apps/install/*
 COPY start.sh /data/
 RUN echo "nvcc --version > /tmp/nvcc_version.txt" >> /tests.sh \
     && echo "echo "nvcc version is $(cat /tmp/nvcc_version.txt)"" >> /tests.sh \
