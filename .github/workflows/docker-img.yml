@@ -1,0 +1,19 @@
+name: Podman Image CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  clear-cache:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Login to DockerHub
+      run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | podman login docker.io --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+    - name: Build and push
+      run: |
+        podman build -t ${{ secrets.DOCKER_HUB_USERNAME }}/libra:volta70 -f ./libra.dockerfile .
+        podman push ${{ secrets.DOCKER_HUB_USERNAME }}/libra:volta70
