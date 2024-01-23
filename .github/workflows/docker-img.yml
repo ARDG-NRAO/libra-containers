@@ -7,11 +7,21 @@ on:
 
 jobs:
   clear-cache:
+    runs-on: self-hosted
+    steps:
+      - name: Clear cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.os }}-build-${{ github.run_id }}
+          restore-keys: |
+
   build:
+    needs: clear-cache
     runs-on: self-hosted
     strategy:
       matrix:
-        tag: ['volta70', 'turin75', 'ampere80', 'ampere86', 'hopper90']
+        tag: ['volta70', 'turing75', 'ampere80', 'ampere86', 'hopper90']
         cuda_arch: ['Kokkos_ARCH_VOLTA70', 'Kokkos_ARCH_TURING75', 'Kokkos_ARCH_AMPERE80', 'Kokkos_ARCH_AMPERE86', 'Kokkos_ARCH_HOPPER90']
     steps:
     - uses: actions/checkout@v3
