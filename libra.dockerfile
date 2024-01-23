@@ -7,6 +7,7 @@ LABEL Version v0.0.1
 
 # Build stage
 FROM base as build
+ARG Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70
 ENV PATH=/data/libra/apps/src/:/data/libra/dependencies/linux_64b/bin/:/data/libra/dependencies/linux_64b/sbin/:$PATH
 ENV LD_LIBRARY_PATH=/data/libra/apps/install:/data/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
 ENV LIBRA_PATH=/data/libra
@@ -21,7 +22,7 @@ RUN dnf -y clean all \
     && git clone --recursive https://github.com/ARDG-NRAO/LibRA.git libra\
     && cd libra \
     && make -f makefile.libra allclone \
-    && make Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70 -f makefile.libra allbuild
+    && make Kokkos_CUDA_ARCH=$Kokkos_CUDA_ARCH -f makefile.libra allbuild
 
 # Final stage
 FROM base
