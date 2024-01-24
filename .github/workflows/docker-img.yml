@@ -21,13 +21,17 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        tag: ['volta70', 'turing75', 'ampere80', 'ampere86', 'hopper90']
-        cuda_arch: ['Kokkos_ARCH_VOLTA70', 'Kokkos_ARCH_TURING75', 'Kokkos_ARCH_AMPERE80', 'Kokkos_ARCH_AMPERE86', 'Kokkos_ARCH_HOPPER90']
+        config: 
+          - {tag: 'volta70', cuda_arch: 'Kokkos_ARCH_VOLTA70'}
+          - {tag: 'turing75', cuda_arch: 'Kokkos_ARCH_TURING75'}
+          - {tag: 'ampere80', cuda_arch: 'Kokkos_ARCH_AMPERE80'}
+          - {tag: 'ampere86', cuda_arch: 'Kokkos_ARCH_AMPERE86'}
+          - {tag: 'hopper90', cuda_arch: 'Kokkos_ARCH_HOPPER90'}
     steps:
     - uses: actions/checkout@v3
     - name: Login to DockerHub
       run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | podman login docker.io --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
     - name: Build and push
       run: |
-        podman build --build-arg Kokkos_CUDA_ARCH=${{ matrix.cuda_arch }} -t ${{ secrets.DOCKER_HUB_USERNAME }}/libra:${{ matrix.tag }} -f ./libra.dockerfile .
-        podman push ${{ secrets.DOCKER_HUB_USERNAME }}/libra:${{ matrix.tag }}
+        podman build --build-arg Kokkos_CUDA_ARCH=${{ matrix.config.cuda_arch }} -t ${{ secrets.DOCKER_HUB_USERNAME }}/libra:${{ matrix.config.tag }} -f ./libra.dockerfile .
+        podman push ${{ secrets.DOCKER_HUB_USERNAME }}/libra:${{ matrix.config.tag }}
