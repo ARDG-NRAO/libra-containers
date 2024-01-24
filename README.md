@@ -1,3 +1,6 @@
+
+[![Podman Image CI](https://github.com/ARDG-NRAO/libra-containers/actions/workflows/docker-img.yml/badge.svg)](https://github.com/ARDG-NRAO/libra-containers/actions/workflows/docker-img.yml)
+
 # LibRA Singularity Container
 
 The goal of this repo is to enable the production of a singularity based minimum dependency `roadrunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html). Running singularity in a privileged mode for the general user also requires that you be added to the singularity user group, make sure your user id belongs that group before you proceed any further.
@@ -56,3 +59,5 @@ Would let you run and interact with the application as if it were natively run o
 
 The version of cuda and the corresponding versions of drivers needed to run the conainers is available [here](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html).
 We have tested and support cuda toolkit verions 11.1 and beyond where the nvidia graphics driver version is >=450.80.02. There toolkit version is specified on the name of each .def file in the repo. Please choose the one appropriate for your graphics card.
+
+
