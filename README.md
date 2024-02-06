@@ -3,11 +3,25 @@
 
 # LibRA Singularity Container
 
-The goal of this repo is to enable the production of a singularity based minimum dependency `roadrunner` application for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` installed on you machine of choice. If not please contact your sysadmin or refer to the ample documentation [available online](https://docs.sylabs.io/guides/3.11/user-guide/index.html). Running singularity in a privileged mode for the general user also requires that you be added to the singularity user group, make sure your user id belongs that group before you proceed any further.
+The goal of this repo is to enable the production of a singularity based minimum dependency  build of the `LibRA` applications for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` or alternatively `apptainer` installed on your machine of choice. If not please contact your sysadmin or refer to the ample documentation available online [here](https://docs.sylabs.io/guides/3.11/user-guide/index.html) or for `apptainer` [here](https://apptainer.org/docs/admin/main/installation.html). Running `singularity` or `apptainer` in a privileged mode for the general user also requires that you be added to the corresponding user group, make sure your user id belongs that group before you proceed any further. Here is an example of how you might edit the following files.
 
 [[_TOC_]]
 
 ## Building the container
+
+### Building from prebuilt containers
+The container files shown here are built and pushed to [dockerhub](https://hub.docker.com/repository/docker/pjaganna/libra/tags?page=1&ordering=last_updated) for a variety of NVIDIA GPU architectures. If you would like to pull and use and try out `LibRA` you can do it as follows. 
+```
+singularity build libra.sif docker://pjaganna/libra:volta70 
+```
+
+if using `apptainer` please replace `singularity` in the command to apptainer. The containers can also be built and used in `docker` or `podman` (My personal preference for unprivileged user building) as 
+```
+docker pull pjaganna/libra:volta70
+```
+This will result in a container called `libra` with the `volta70` as a tagname. The same is possible with `podman` as a drop in replacement for `docker`.
+
+### Building from the container files
 If you are going to use the container or build repeatedly please set the SINGULARITY_CACHEDIR variable in your bashrc to a path that is not in your user area. This will ensure that the build does not fail due to the user quota limits. The [libra](https://gitlab.nrao.edu/sbhatnag/libra) project relies on [kokkos](https://github.com/kokkos/kokkos/) which has device specific compile directives. So the hardware on which you are going to utilize the container will define the flag in the makefile. The default flag is for the new generation of ampere GPUs like the A4000 and so is set to kokkos_ARCH_AMPERE86. Alter it according to the compute archiecture of your GPU. Here is a table for easy reference.
 
 |min CUDA Version|kokkos FLAG|GPU Model|
@@ -47,12 +61,6 @@ This should result in a commandline interface to the `roadrunner` application. B
 singularity shell --nv  --bind host_path:container_mount_point my_container_folder
 ```
 A point of note is that multiple --bind commands can be utilized to bing multiple host paths inside the container.
-
-## Running the roadrunner app from within singularity
-```
-singularity run --nv --app roadrunner my_container_folder
-```
-Would let you run and interact with the application as if it were natively run on your machine while being deployed from within the container. Other such apps will be made available in this manner going forward.
 
 
 ## CUDA Versions and Compatibility

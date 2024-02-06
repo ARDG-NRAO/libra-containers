@@ -28,12 +28,12 @@ fi
 APP=$1; shift
 
 # does it exist?
-if [ ! -x /libra/apps/install/$APP ]; then
-    "Error: unable to locate $APP in /libra/apps/install"
+if [ ! -x /data/libra/apps/install/$APP ]; then
+    "Error: unable to locate $APP in /data/libra/apps/install"
     usage
 fi
 
 # it must exist, so let's proceed
 echo "passing command line arguments to $APP: $@"
 
-/libra/apps/install/$APP $@ 
+/data/libra/apps/install/$APP $@ 
