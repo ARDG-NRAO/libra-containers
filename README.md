@@ -3,8 +3,11 @@
 
 # LibRA Singularity Container
 
-The goal of this repo is to enable the production of a singularity based minimum dependency  build of the `LibRA` applications for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` or alternatively `apptainer` installed on your machine of choice. If not please contact your sysadmin or refer to the ample documentation available online [here](https://docs.sylabs.io/guides/3.11/user-guide/index.html) or for `apptainer` [here](https://apptainer.org/docs/admin/main/installation.html). Running `singularity` or `apptainer` in a privileged mode for the general user also requires that you be added to the corresponding user group, make sure your user id belongs that group before you proceed any further. Here is an example of how you might edit the following files.
-
+The goal of this repo is to enable the production of a singularity based minimum dependency  build of the `LibRA` applications for development and testing across different NVIDIA GPUs and for easier shared development. At this juncture it is assumed that you have `singularity` or alternatively `apptainer` installed on your machine of choice. If not please contact your sysadmin or refer to the ample documentation available online [here](https://docs.sylabs.io/guides/3.11/user-guide/index.html) or for `apptainer` [here](https://apptainer.org/docs/admin/main/installation.html). Running `singularity` or `apptainer` in a privileged mode for the general user also requires that you be added to the corresponding user group, make sure your user id belongs that group before you proceed any further. To be able to use `--fakeroot` you need to setup `/etc/subuid` or  `/etc/subgid` as 
+```
+foo:100000:65536
+```
+where say `foo` is your username.
 [[_TOC_]]
 
 ## Building the container
@@ -38,7 +41,7 @@ In order to build the LibRA container for development so you can make all your e
 ```
 singularity build --sandbox --fakeroot --fix-perms my_container_folder libra-cuda-12.2.0-devel-rockylinux8_readonly.def
 ```
-The `--fakeroot` flag allows you root access within the container which we need to install the dependencies for development. The `--fix-perms` will allow you for you to remove the directory structure without needing higher privileges (sudo/su). 
+The `--fakeroot` flag allows you root access within the container which we need to install the dependencies for development. The `--fix-perms` will allow you for you to remove the directory structure without needing higher privileges (sudo/su).  T
 
 ## Running the code from within the container
 The application can be used as an app or via the commandline. In order to access the application via commandline you can launch a `shell` inside the container as follows. This allows you to edit code and build the application once again should you need it
