@@ -4,6 +4,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  repository_dispatch:
+    branches: ["main"]
 
 jobs:
   clear-cache:
