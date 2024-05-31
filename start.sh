@@ -5,7 +5,10 @@ set -o nounset -o errexit
 
 # report issues
 usage() {
-  echo "Usage: ./start.sh [ roadrunner | hummbee ] <... arguments ...>"
+  echo "Usage: ./start.sh [ roadrunner | hummbee | coyote | acme ] <... arguments ...>"
+  echo "  --help: show this message"
+  echo "  --override: start a bash shell"
+  echo "  --profiler [ncu | nsys]: start the profiler"
   exit 1
 }
 
@@ -18,6 +21,19 @@ fi
 if [[ "$1" == "--override" ]]; then
   exec /bin/bash
 fi
+
+# check for the --profiler flag and set the profiler as ncu or nsys
+if [[ "$1" == "--profiler" ]]; then
+  if [[ "$2" == "ncu" ]]; then
+    export PROFILER="ncu"
+  elif
+    [[ "$2" == "nsys" ]]; then
+    export PROFILER="nsys"
+  else
+    echo "Error: Invalid profiler. Please use either ncu or nsys"
+    usage
+  fi
+
 
 # not enough arguments? we have failed
 if [ "$#" -lt 1 ]; then

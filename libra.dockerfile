@@ -22,9 +22,10 @@ RUN dnf -y clean all \
     && cd /data/ \
     && git clone --recursive https://github.com/ARDG-NRAO/LibRA.git libra\
     && cd libra \
-    && make -f makefile.libra allclone \
-    && make Kokkos_CUDA_ARCH=$Kokkos_CUDA_ARCH -f makefile.libra allbuild \
-    && ls /data/libra/apps/install  
+    && mkdir -p build && cd build \
+    && cmake -DBUILD_TESTS=ON -DKokkos_CUDA_ARCH_NAME=hopper100 ..\
+    && make -j ${nproc} 
+    && ls /data/libra/install/bin/
 
 COPY start.sh /data/
 RUN echo "nvcc --version > /tmp/nvcc_version.txt" >> /tests.sh \
