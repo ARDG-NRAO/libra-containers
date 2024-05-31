@@ -7,7 +7,7 @@ LABEL Version v0.0.1
 
 # Build stage
 FROM base as build
-ARG Kokkos_CUDA_ARCH=Kokkos_ARCH_VOLTA70
+ARG Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE80
 ARG nproc=8
 ENV PATH=/data/libra/apps/src/:/data/libra/dependencies/linux_64b/bin/:/data/libra/dependencies/linux_64b/sbin/:$PATH
 ENV LD_LIBRARY_PATH=/data/libra/apps/install:/data/libra/dependencies/linux_64b/lib/:/usr/local/cuda-12.2/compat:$LD_LIBRARY_PATH
@@ -20,12 +20,11 @@ RUN dnf -y clean all \
     && dnf -y install {gtest,readline,ncurses,blas,lapack,cfitsio,fftw,wcslib,gsl,eigen3,openmpi,python38}-devel \
     && mv /data/readline.pc /usr/lib64/pkgconfig/ \
     && cd /data/ \
-    && git clone --recursive https://github.com/ARDG-NRAO/LibRA.git libra\
-    && cd libra \
+    && git clone --recursive https://github.com/ARDG-NRAO/LibRA.git libra
+RUN cd libra \
     && mkdir -p build && cd build \
-    && cmake -DBUILD_TESTS=ON -DKokkos_CUDA_ARCH_NAME=hopper100 ..\
-    && make -j ${nproc} 
-    && ls /data/libra/install/bin/
+    && cmake -DApps_BUILD_TESTS=ON -DKokkos_CUDA_ARCH_NAME=${Kokkos_CUDA_ARCH} ..\
+    && make 
 
 COPY start.sh /data/
 RUN echo "nvcc --version > /tmp/nvcc_version.txt" >> /tests.sh \
