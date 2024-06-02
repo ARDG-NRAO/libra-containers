@@ -28,7 +28,7 @@ From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
    cd libra
    mkdir build
    cd build
-   cmake -DApps_BUILD_TESTS=ON -DKokkos_CUDA_ARCH_NAME=Kokkos_ARCH_AMPERE86 ..
+   cmake -DApps_BUILD_TESTS=ON -DKokkos_CUDA_ARCH_NAME=Kokkos_ARCH_VOLTA70 ..
    make
 
 
