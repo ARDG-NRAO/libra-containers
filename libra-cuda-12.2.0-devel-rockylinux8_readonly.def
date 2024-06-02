@@ -26,8 +26,11 @@ From: nvcr.io/nvidia/cuda:12.2.0-devel-rockylinux8
    mv /readline.pc /usr/lib64/pkgconfig/
    git clone https://github.com/ARDG-NRAO/LibRA.git libra
    cd libra
-   make -f makefile.libra allclone
-   make Kokkos_CUDA_ARCH=Kokkos_ARCH_AMPERE86 -f makefile.libra allbuild
+   mkdir build
+   cd build
+   cmake -DApps_BUILD_TESTS=ON -DKokkos_CUDA_ARCH_NAME=Kokkos_ARCH_AMPERE86 ..
+   make
+
 
 
 %test
